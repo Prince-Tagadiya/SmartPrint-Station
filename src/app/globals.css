@@ -1,0 +1,376 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+/* ============================================================
+   Print Kiosk — Design System
+   Industrial. Minimal. Professional. Touch-Friendly.
+   ============================================================ */
+
+@theme {
+  /* Proper Light Mode Default Colors */
+  --color-kiosk-bg: #f4f4f5;
+  --color-kiosk-surface: #ffffff;
+  --color-kiosk-surface-raised: #f8fafc;
+  --color-kiosk-surface-hover: #f1f5f9;
+  --color-kiosk-border: #e2e8f0;
+  --color-kiosk-border-light: #cbd5e1;
+  --color-kiosk-text: #0f172a;
+  --color-kiosk-text-secondary: #475569;
+  --color-kiosk-text-muted: #94a3b8;
+  
+  --color-kiosk-accent: #3b82f6;
+  --color-kiosk-accent-hover: #2563eb;
+  --color-kiosk-success: #16a34a;
+  --color-kiosk-success-bg: rgba(22, 163, 74, 0.1);
+  --color-kiosk-warning: #ea580c;
+  --color-kiosk-warning-bg: rgba(234, 88, 12, 0.1);
+  --color-kiosk-danger: #dc2626;
+  --color-kiosk-danger-bg: rgba(220, 38, 38, 0.1);
+  --color-kiosk-processing: #7c3aed;
+  --color-kiosk-processing-bg: rgba(124, 58, 237, 0.1);
+
+  --font-family-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* ============================================================
+   Base Styles
+   ============================================================ */
+
+:root {
+  --kiosk-radius: 12px;
+  --kiosk-radius-sm: 8px;
+  --kiosk-radius-lg: 16px;
+  --kiosk-transition: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  font-family: var(--font-family-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-kiosk-bg);
+  color: var(--color-kiosk-text);
+  min-height: 100vh;
+}
+
+/* ============================================================
+   Component Styles
+   ============================================================ */
+
+/* Card */
+.kiosk-card {
+  background: var(--color-kiosk-surface);
+  border: 1px solid var(--color-kiosk-border);
+  border-radius: var(--kiosk-radius);
+  padding: 1.25rem;
+  transition: border-color var(--kiosk-transition);
+}
+
+.kiosk-card:hover {
+  border-color: var(--color-kiosk-border-light);
+}
+
+/* Buttons */
+.kiosk-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  border-radius: var(--kiosk-radius-sm);
+  transition: all var(--kiosk-transition);
+  cursor: pointer;
+  user-select: none;
+  min-height: 48px;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9375rem;
+  letter-spacing: 0.01em;
+  border: none;
+  outline: none;
+}
+
+.kiosk-btn:active {
+  transform: scale(0.97);
+}
+
+.kiosk-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.kiosk-btn-primary {
+  background: var(--color-kiosk-accent);
+  color: #ffffff;
+}
+.kiosk-btn-primary:hover:not(:disabled) {
+  background: var(--color-kiosk-accent-hover);
+}
+
+.kiosk-btn-success {
+  background: var(--color-kiosk-success);
+  color: #ffffff;
+}
+.kiosk-btn-success:hover:not(:disabled) {
+  background: #16a34a;
+}
+
+.kiosk-btn-danger {
+  background: var(--color-kiosk-danger);
+  color: #ffffff;
+}
+.kiosk-btn-danger:hover:not(:disabled) {
+  background: #dc2626;
+}
+
+.kiosk-btn-ghost {
+  background: transparent;
+  color: var(--color-kiosk-text-secondary);
+  border: 1px solid var(--color-kiosk-border);
+}
+.kiosk-btn-ghost:hover:not(:disabled) {
+  background: var(--color-kiosk-surface-hover);
+  color: var(--color-kiosk-text);
+}
+
+.kiosk-btn-lg {
+  min-height: 56px;
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+  border-radius: var(--kiosk-radius);
+}
+
+.kiosk-btn-xl {
+  min-height: 72px;
+  padding: 1.25rem 2.5rem;
+  font-size: 1.25rem;
+  border-radius: var(--kiosk-radius-lg);
+  font-weight: 700;
+}
+
+/* Status Indicator */
+.kiosk-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.kiosk-status-dot.online {
+  background: var(--color-kiosk-success);
+  box-shadow: 0 0 8px var(--color-kiosk-success);
+}
+
+.kiosk-status-dot.offline {
+  background: var(--color-kiosk-danger);
+  box-shadow: 0 0 8px var(--color-kiosk-danger);
+}
+
+.kiosk-status-dot.warning {
+  background: var(--color-kiosk-warning);
+  box-shadow: 0 0 8px var(--color-kiosk-warning);
+}
+
+.kiosk-status-dot.processing {
+  background: var(--color-kiosk-processing);
+  box-shadow: 0 0 8px var(--color-kiosk-processing);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Badge */
+.kiosk-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  border: 1px solid;
+}
+
+/* Input */
+.kiosk-input {
+  background: var(--color-kiosk-surface);
+  border: 1px solid var(--color-kiosk-border);
+  border-radius: var(--kiosk-radius-sm);
+  padding: 0.75rem 1rem;
+  color: var(--color-kiosk-text);
+  font-size: 0.9375rem;
+  width: 100%;
+  outline: none;
+  transition: border-color var(--kiosk-transition);
+  min-height: 48px;
+}
+
+.kiosk-input:focus {
+  border-color: var(--color-kiosk-accent);
+}
+
+/* Select */
+.kiosk-select {
+  background: var(--color-kiosk-surface);
+  border: 1px solid var(--color-kiosk-border);
+  border-radius: var(--kiosk-radius-sm);
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  color: var(--color-kiosk-text);
+  font-size: 0.9375rem;
+  width: 100%;
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+  min-height: 48px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239898a8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+}
+
+.kiosk-select:focus {
+  border-color: var(--color-kiosk-accent);
+}
+
+/* Progress bar */
+.kiosk-progress {
+  width: 100%;
+  height: 8px;
+  background: var(--color-kiosk-surface-raised);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.kiosk-progress-bar {
+  height: 100%;
+  background: var(--color-kiosk-accent);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.kiosk-progress-bar.success {
+  background: var(--color-kiosk-success);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-kiosk-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-kiosk-border-light);
+}
+
+/* ============================================================
+   Animations
+   ============================================================ */
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.4s ease-out;
+}
+
+/* ============================================================
+   TFT-Specific Overrides (480×320 viewport)
+   ============================================================ */
+
+.tft-viewport {
+  width: 480px;
+  height: 320px;
+  overflow: hidden;
+  position: relative;
+  background: var(--color-kiosk-bg);
+  font-size: 14px;
+}
+
+.tft-viewport .kiosk-btn {
+  min-height: 56px;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: var(--kiosk-radius);
+}
+
+.tft-viewport .kiosk-btn-xl {
+  min-height: 80px;
+  font-size: 1.5rem;
+}
+
+/* ============================================================
+   Utility Classes
+   ============================================================ */
+
+.text-gradient {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glow-accent {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
+}
+
+.glow-success {
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.15);
+}
+
+.glow-danger {
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.15);
+}
+
+@keyframes scan-laser {
+  0% { top: 0%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+.animate-scan-laser {
+  animation: scan-laser 3s ease-in-out infinite;
+}
+
+@keyframes document-place {
+  0% { transform: translateY(-50px) rotate(-5deg); opacity: 0; }
+  20% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  80% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(0) rotate(0deg); opacity: 0; }
+}
+.animate-document-place {
+  animation: document-place 4s ease-in-out infinite;
+}
