@@ -1,0 +1,3 @@
+const str = '\
+';
+console.log(str.length);
