@@ -107,6 +107,23 @@ bool mpu_checkTamper() {
   float deviation = abs(mag - baseMag);
 
   if (deviation > TAMPER_THRESHOLD) {
+    // Check if this acceleration spike is due to a fast scanner lid opening motion
+    if (calData.isCalibrated) {
+      float dot = ax * calData.closedX + ay * calData.closedY + az * calData.closedZ;
+      float magCurr = sqrtf(ax * ax + ay * ay + az * az);
+      float magCal = sqrtf(calData.closedX * calData.closedX +
+                           calData.closedY * calData.closedY +
+                           calData.closedZ * calData.closedZ);
+      if (magCurr >= 0.1f && magCal >= 0.1f) {
+        float cosAngle = constrain(dot / (magCurr * magCal), -1.0f, 1.0f);
+        float rawDeg = acosf(cosAngle) * 180.0f / PI;
+        // If raw angle is > 5.0 degrees, the user is opening the scanner lid fast! Ignore tamper spike.
+        if (rawDeg > 5.0f) {
+          return false;
+        }
+      }
+    }
+
     if (!tamperDetected) {
       // New tamper event!
       tamperDetected = true;
