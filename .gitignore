@@ -40,3 +40,7 @@ database.sqlite
 
 # typescript
 *.tsbuildinfo
+
+# uploads
+public/uploads/*
+!public/uploads/.gitkeep

@@ -28,7 +28,7 @@
 
 #define SCREEN_W       240
 #define SCREEN_H       320
-#define TFT_ROTATION   2  // Portrait Inverted
+#define TFT_ROTATION   2  // Portrait Inverted (180 degree flip)
 
 // ─── Color Palette (RGB565) ─────────────────────────
 // Premium dark theme with vibrant accents

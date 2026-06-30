@@ -6,7 +6,8 @@
 // =====================================================
 
 // ─── Display Driver ─────────────────────────────────
-#define ILI9341_DRIVER
+#define ST7789_DRIVER
+#define TFT_RGB_ORDER TFT_BGR // Standard color order for ST7789
 
 // ─── Display Dimensions ─────────────────────────────
 #define TFT_WIDTH  240
@@ -40,4 +41,4 @@
 
 // ─── Other Settings ─────────────────────────────────
 // #define TFT_INVERSION_ON   // Uncomment if colors look inverted
-// #define TFT_INVERSION_OFF
+#define TFT_INVERSION_OFF

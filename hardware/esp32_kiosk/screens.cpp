@@ -650,8 +650,11 @@ void scr_updateScanLidOpen() {
 //  STEP 2: Place Document (3D-like Paper Lying Down Animation)
 // ═════════════════════════════════════════════════════
 
+static float initialPlaceAngle = -1.0f;
+
 void scr_drawScanPlaceDoc() {
   tft.fillScreen(COL_BG);
+  initialPlaceAngle = sData.lidAngle;
 
   ui_drawGradientRect(0, 0, SCREEN_W, 4, COL_ACCENT, COL_ACCENT2);
 
@@ -750,10 +753,11 @@ void scr_updateScanPlaceDoc() {
     tft.fillCircle(cx - 15 + i * 15, 304, 4, c);
   }
 
-  // User requested: only advance when lid drops significantly (e.g. angle < 58.0f),
-  // ignoring minor shaking while putting paper!
-  if (angle < 58.0f) {
+  // User requested: after placing document, if the user moves the lid UP or DOWN
+  // by more than 2 degrees in either direction, immediately advance to the Close Lid screen!
+  if (fabsf(angle - initialPlaceAngle) > 2.0f || angle < 58.0f) {
     lastDrawnAngle = -999.0f;
+    initialPlaceAngle = -1.0f;
     scanLidThresholdMet = false;
     scanLidHoldStart = 0;
     currentScreen = SCR_SCAN_LID_CLOSE;

@@ -31,6 +31,7 @@
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
 #include <ArduinoJson.h>
+#include <Preferences.h>
 #include <SPI.h>
 #include <TFT_eSPI.h>
 #include "qrcode.h"
@@ -132,14 +133,24 @@ void setup() {
     delay(50);
   }
 
+  Preferences prefs;
+  prefs.begin("touch", false);
+
   if (doCal) {
     tft.fillScreen(TFT_BLACK);
-    uint16_t calData[5];
-    tft.calibrateTouch(calData, TFT_WHITE, TFT_BLACK, 15);
-    tft.setTouch(calData);
+    uint16_t tCalData[5];
+    tft.calibrateTouch(tCalData, TFT_WHITE, TFT_BLACK, 15);
+    tft.setTouch(tCalData);
+    prefs.putBytes("calData", tCalData, sizeof(tCalData));
   } else {
-    tft.setTouch(touchCalData);
+    uint16_t tCalData[5];
+    if (prefs.getBytes("calData", tCalData, sizeof(tCalData)) == sizeof(tCalData)) {
+      tft.setTouch(tCalData);
+    } else {
+      tft.setTouch(touchCalData);
+    }
   }
+  prefs.end();
 
   // ── MPU-6050 ──
   mpu_init();
@@ -262,6 +273,7 @@ void loop() {
                          currentScreen == SCR_SCAN_COLLECT ||
                          currentScreen == SCR_OUT_OF_PAPER);
       if (currentScreen != SCR_CALIBRATION &&
+          currentScreen != SCR_ENGINEERING &&
           currentScreen != SCR_PRINT_SESSION &&
           currentScreen != SCR_PRINTING &&
           !inScanFlow) {
@@ -348,10 +360,9 @@ void loop() {
   uint16_t raw_tx, raw_ty;
   bool touched = tft.getTouch(&raw_tx, &raw_ty);
   
-  // The digitizer is mapped horizontally relative to our portrait screen, so we swap X and Y.
-  // We also invert both to rotate the touch 180 degrees to match the visual display.
-  uint16_t tx = SCREEN_W - raw_ty;
-  uint16_t ty = SCREEN_H - raw_tx;
+  // Directly use touch coordinates matching rotation 1
+  uint16_t tx = raw_tx;
+  uint16_t ty = raw_ty;
   static bool wasTouched = false;
 
   if (touched) {

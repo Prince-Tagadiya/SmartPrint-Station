@@ -95,6 +95,7 @@ void mpu_getAccel(float &ax, float &ay, float &az) {
 
 bool mpu_checkTamper() {
   if (!mpuAvailable) return false;
+  if (!calData.isCalibrated) return false;
 
   float ax, ay, az;
   mpu_getAccel(ax, ay, az);
@@ -107,21 +108,17 @@ bool mpu_checkTamper() {
   float deviation = abs(mag - baseMag);
 
   if (deviation > TAMPER_THRESHOLD) {
-    // Check if this acceleration spike is due to a fast scanner lid opening motion
-    if (calData.isCalibrated) {
-      float dot = ax * calData.closedX + ay * calData.closedY + az * calData.closedZ;
-      float magCurr = sqrtf(ax * ax + ay * ay + az * az);
-      float magCal = sqrtf(calData.closedX * calData.closedX +
-                           calData.closedY * calData.closedY +
-                           calData.closedZ * calData.closedZ);
-      if (magCurr >= 0.1f && magCal >= 0.1f) {
-        float cosAngle = constrain(dot / (magCurr * magCal), -1.0f, 1.0f);
-        float rawDeg = acosf(cosAngle) * 180.0f / PI;
-        // If raw angle is > 5.0 degrees, the user is opening the scanner lid fast! Ignore tamper spike.
-        if (rawDeg > 5.0f) {
-          return false;
-        }
-      }
+    // ── User's Brilliant Multi-Axis Hinge Physics Filter ──
+    // During a fast scanner lid opening, X and Z change dramatically due to hinge rotation,
+    // but Y (lateral axis parallel to the hinge) remains highly stable (changing by 0.10-0.15g max).
+    // A true tamper (shaking, bashing, or stealing the kiosk) causes violent multi-axis changes
+    // where lateral Y deviation exceeds 0.35g!
+    float devY = fabsf(ay - baseAY);
+    
+    // If lateral Y deviation is less than 0.35g, this acceleration spike is strictly due to
+    // opening or closing the scanner lid fast! We completely ignore it as a normal user action.
+    if (devY < 0.35f) {
+      return false;
     }
 
     if (!tamperDetected) {
